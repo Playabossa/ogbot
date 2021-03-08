@@ -35,8 +35,7 @@ def update():
             i = score.attrib.get("number")
         i = str(int(i) + 1)
         break
-
-    
+	
     ElementsThere = False
 
     #check if current hiscore list has data
@@ -47,10 +46,9 @@ def update():
             ElementsThere = False
         break
 
-
-    if ElementsThere == False:
-	
+    if ElementsThere == False:	
         lastUpdate = tree2.find("updated").attrib["date"]
+	
 	#check if not updated today
         if not dateNow.strftime("%Y-%m-%d") == lastUpdate:
 	    #set new updated time
@@ -59,6 +57,7 @@ def update():
 	    #get xml from API
             response = r.get("https://s173-en.ogame.gameforge.com/api/highscore.xml?category=1&type=0")
             tree = etree.fromstring(response.content)
+		
 	    #make a player with childnode score
             for player in tree.iter("player"):
                 child = etree.Element("Player")
@@ -71,21 +70,24 @@ def update():
                 score1.tail = "\n"
                 child.append(score1)
                 tree2.append(child)
+		
 	    #add into our hiscore xml
             xmlFile.write("HiScore.xml")
-
             lastUpdate = dateNow
     else:
 	 #if we already have data
          lastUpdate = tree2.find("updated").attrib["date"]
+	
 	 #check if not updated today
          if not dateNow.strftime("%Y-%m-%d") == lastUpdate:
 		
 	    #update updated time
             tree2.find("updated").set("date", dateNow.strftime("%Y-%m-%d"))
+		
             #get xml from API
             response = r.get("https://s173-en.ogame.gameforge.com/api/highscore.xml?category=1&type=0")
             tree = etree.fromstring(response.content)
+	
 	    #per player of HiScore.xml add another score child node and write it back to the file
             for player in tree.iter("player"):
                 for player2 in tree2.iter("Player"):
@@ -97,11 +99,13 @@ def update():
                         score1.set("date", dateNow.strftime("%Y-%m-%d"))
                         score1.tail = "\n"
                         child.append(score1)
+			
 	    #aka the reason it takes so long, because it has to write ALL the nodes back ...
             xmlFile.write("HiScore.xml")
 
             lastUpdate = dateNow      
-  
+
+	
 #function for doing the graph          
 def graph(name):
     update()
@@ -112,6 +116,7 @@ def graph(name):
         listDate = []
 	#two lists ListScore = y axis
 	#ListDate = x axis
+	
 	#for every player get the recorded score of each day
         for Player in tree.iter("Player"):
             if Player.attrib.get("ID") == ID:
@@ -131,6 +136,7 @@ def graph(name):
         plt.figure(figsize=(20,10))
         plt.xlabel("Date")
         ylbl = "Points"
+	
 	#check for W I D E numbers
         for elem in listScore:
             if(elem > 1000000):
@@ -139,7 +145,7 @@ def graph(name):
                 ylbl = "Points in ten Millions"
             if elem > 100000000:
                 ylbl = "Points in hundred Millions"
-	
+		
 	#get difference from day before
         diffYes = listScore[-1] - listScore[-2] 
         if diffYes > 0:
@@ -166,7 +172,6 @@ def getID(Name):
     try:
 	#get api list of all players
         response = r.get("https://s173-en.ogame.gameforge.com/api/players.xml")
-
         tree = etree.fromstring(response.content)
 	find our entered player, return 0 if nothing is found
         for player in tree.iter("player"):
@@ -231,8 +236,7 @@ def getData(ID):
             ships = False
         PositionList.append(ToAdd)
 
-    result += tabulate(PositionList, headers = ["Category", "Points", "Rank", ""])
-    
+    result += tabulate(PositionList, headers = ["Category", "Points", "Rank", ""])    
     result += "\n\nPlanets\n\n"
 
     #planets
