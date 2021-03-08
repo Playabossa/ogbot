@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 import datetime
 from matplotlib import pyplot as plt
 
-#need to pip install discord, requests, lxml, tabulate, dotenv, matplotlib
+#need to pip install discord, requests, lxml, tabulate, python-dotenv, matplotlib
 
 PlanetList = []
 PositionList = []
