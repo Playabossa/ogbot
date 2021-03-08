@@ -28,7 +28,7 @@ def update():
     xmlFile = etree.parse("HiScore.xml")
     i = "1"
 
-    set i to the number of collected data points +1
+    #set i to the number of collected data points +1
     tree2 = xmlFile.getroot()
     for player in tree2.iter("Player"):
         for score in player.iter("Score"):
@@ -112,7 +112,7 @@ def graph(name):
         listDate = []
 	#two lists ListScore = y axis
 	#ListDate = x axis
-	#for every player get the recorded score of the day
+	#for every player get the recorded score of each day
         for Player in tree.iter("Player"):
             if Player.attrib.get("ID") == ID:
                 for Score in Player.iter("Score"):
@@ -304,9 +304,12 @@ async def on_message(message):
             os.remove(file)
         
 
-
+#usual command to run the bot on the server. (THE .env FILE IS MISSING SO WONT WORK)
 #client.run(TOKEN)
+
 #to graph:
 graph("Magalampa")
+
 #to showme:
 #ini("Magalampa")
+#print(result)
